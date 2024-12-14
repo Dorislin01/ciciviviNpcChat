@@ -78,7 +78,8 @@ namespace Doris01
                 {
                     int best = response.Select((value, index) => new
                     {
-                        Value = value, Index = index
+                        Value = value,
+                        Index = index
                     }).OrderByDescending(x => x.Value).First().Index;
                     print($"<color=#77f>³Ì¨Îµ²ªG:[npcSentences[best]]</color>");
 
