@@ -17,7 +17,7 @@ namespace Doris01
         private void Awake()
         {
             //尋找場景上名稱為輸入介面的物件 並存放到 inputField變數內
-            inputField = Gameobject.Find("輸入介面").GetComponent<TMP_InputField>();
+            inputField = GameObject.Find("輸入介面").GetComponent<TMP_InputField>();
             //當玩家結束編輯輸入介面時會執行 PlayerInput 方法
             inputField.onEndEdit.AddListener(PlayerInput);
         }
