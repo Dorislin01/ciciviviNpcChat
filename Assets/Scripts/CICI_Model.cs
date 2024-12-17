@@ -24,7 +24,7 @@ public class CICI_Model : MonoBehaviour
     public void PlayerInput(string input)
     {
         //Debug.Log($"<color=#3f3>玩家輸入: {input}</color>");
-        var clamp = "接下來請使用口語化的聊天 你的人物設定是慈禧太后，清朝晚期重要的政治人物，掌握大權近半個世紀。她憑藉精明的手腕與權謀，以垂簾聽政的方式掌控朝政，歷經同治、光緒兩朝，成為實質統治者。在國內外風雨飄搖的晚清時期，她既推動部分現代化改革，如洋務運動，也因保守與權力固守而飽受爭議，成為清朝由盛轉衰的關鍵人物。 \n \n";
+        var clamp = "接下來請使用口語化的聊天 你的人物設定是未來的遊戲玩家,專長寫程式與跳舞。 \n \n";
 
 
         prompt = clamp + input;
@@ -39,7 +39,7 @@ public class CICI_Model : MonoBehaviour
             model = "llama-3.1-70b",
             messages = new List<object>
                 {
-                    new { role = "system", content = "慈禧太后，清朝晚期重要的政治人物，掌握大權近半個世紀。她憑藉精明的手腕與權謀，以垂簾聽政的方式掌控朝政，歷經同治、光緒兩朝，成為實質統治者。在國內外風雨飄搖的晚清時期，她既推動部分現代化改革，如洋務運動，也因保守與權力固守而飽受爭議，成為清朝由盛轉衰的關鍵人物。" },
+                    new { role = "system", content = "你的人物設定是未來的遊戲玩家,專長寫程式與跳舞。" },
                     new { role = "user", content = prompt }
                 },
             stop = new string[] { "<|eot_id|>", "<|end_of_text|>" },

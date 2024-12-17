@@ -22,14 +22,14 @@ public class VIVI_Model : MonoBehaviour
 
     private void Start()
     {
-        target.PlayerInput("你好，我是維多利亞女王，大不列顛及愛爾蘭聯合王國的君主，同時也是印度的皇后。 很高興認識你");
+        target.PlayerInput("你好，我是師大設計系學生芋頭。 很高興認識你");
     }
 
 
     public void PlayerInput(string input)
     {
         //Debug.Log($"<color=#3f3>玩家輸入: {input}</color>");
-        var clamp = "接下來請使用口語化的聊天 你的人物設定是 維多利亞女王，英國史上在位最久的君主之一，象徵著維多利亞時代的繁榮與變革。她見證了工業革命、英國現代化發展及大英帝國的擴張，同時重視家庭與傳統，透過子女聯結歐洲皇室，被譽為「歐洲的祖母」。 \n \n";
+        var clamp = "接下來請使用口語化的聊天 你的人物設定是設計系女學生,喜歡唱歌跳舞。 \n \n";
 
 
         prompt = clamp + input;
@@ -44,7 +44,7 @@ public class VIVI_Model : MonoBehaviour
             model = "llama-3.1-70b",
             messages = new List<object>
                 {
-                    new { role = "system", content = "維多利亞女王，英國史上在位最久的君主之一，象徵著維多利亞時代的繁榮與變革。她見證了工業革命、英國現代化發展及大英帝國的擴張，同時重視家庭與傳統，透過子女聯結歐洲皇室，被譽為「歐洲的祖母」。" },
+                    new { role = "system", content = "設計系女學生,喜歡唱歌跳舞。" },
                     new { role = "user", content = prompt }
                 },
             stop = new string[] { "<|eot_id|>", "<|end_of_text|>" },
