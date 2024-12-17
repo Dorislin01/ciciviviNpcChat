@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class ciciviviNpcChat : MonoBehaviour
 {
-    private GoogleGeminiAPI geminiAPI;
+    //private GoogleGeminiAPI geminiAPI;
     private string[] options = { "石頭", "布", "剪刀" };
     private int ai1Wins = 0, ai2Wins = 0;
     private int totalRounds = 5;
 
     void Start()
     {
-        geminiAPI = gameObject.AddComponent<GoogleGeminiAPI>();
+        //geminiAPI = gameObject.AddComponent<GoogleGeminiAPI>();
         StartCoroutine(PlayGame());
     }
 
@@ -35,18 +35,20 @@ public class ciciviviNpcChat : MonoBehaviour
 
             // AI 對話
             string prompt = $"在第 {round} 輪中，AI 1 選擇了 {ai1Choice}，AI 2 選擇了 {ai2Choice}。結果是：{roundResult}。請模擬 AI 之間的對話。";
-            yield return StartCoroutine(geminiAPI.GenerateContent(prompt, response =>
-            {
-                Debug.Log($"AI 之間的聊天：\n{response}");
-            }));
+            //yield return StartCoroutine(geminiAPI.GenerateContent(prompt, response =>
+            //{
+                //Debug.Log($"AI 之間的聊天：\n{response}");
+            //}));
         }
 
         // 總結對話
         string finalPrompt = $"AI 1 贏了 {ai1Wins} 次，AI 2 贏了 {ai2Wins} 次。請模擬 AI 之間的對話，討論他們的表現。";
-        yield return StartCoroutine(geminiAPI.GenerateContent(finalPrompt, response =>
-        {
-            Debug.Log($"遊戲結束！\n{response}");
-        }));
+        //yield return StartCoroutine(geminiAPI.GenerateContent(finalPrompt, response =>
+        //{
+        //Debug.Log($"遊戲結束！\n{response}");
+        //}));
+
+        yield return null;
     }
 
     string GetRandomChoice()

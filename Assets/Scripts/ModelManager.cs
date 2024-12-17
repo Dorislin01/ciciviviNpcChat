@@ -1,30 +1,74 @@
+ï»¿using System.Collections;
+using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Doris01
 {
-  ///<summary>
-  ///¼Ò«¬ºŞ²z¾¹
-  ///</summary>
-  public class ModelManager : MonoBehaviour
-  {
+    /// <summary>
+    ///æ¨¡å‹ç®¡ç†å™¨
+    /// </summary>
+    public class ModelManager : MonoBehaviour
+    {
         private string url = "https://g.ubitus.ai/v1/chat/completions";
-        private string key = "d4pHv5n2G3q2vkVMPen3vFMfUJic4huKiQbvMmGLWUVIr/ptUuGnsCx/zVdYmVtdrGPO9//2h8Fbp6HkSQ0/oA==";
+        private string key = "d4pHv5n2G3q2vkVMPen3vFMfUJic4huKiQbvMmGLWUVIr/ptUuGnsCx/zVdYmVtdrGP09//2h8Fbp6HkSQ0/A==";
 
         private TMP_InputField inputField;
+        private string prompt;
+        private string role = "ä½ æ˜¯ä¸€éš»å°ç¬¨ç‹—";
 
-        //³ê¿ô¨Æ¥ó:¹CÀ¸¼½©ñ«á°õ¦æ¤@¦¸
+        //å–šé†’äº‹ä»¶:éŠæˆ²æ’­æ”¾å¾ŒæœƒåŸ·è¡Œä¸€æ¬¡
         private void Awake()
         {
-            //´M§ä³õ´º¤W¦WºÙ¬°¿é¤J¤¶­±ªºª«¥ó ¨Ã¦s©ñ¨ì inputFieldÅÜ¼Æ¤º
-            inputField = GameObject.Find("¿é¤J¤¶­±").GetComponent<TMP_InputField>();
-            //·íª±®aµ²§ô½s¿è¿é¤J¤¶­±®É·|°õ¦æ PlayerInput ¤èªk
+            //å°‹æ‰¾å ´æ™¯ä¸Šåç¨±ç‚º è¼¸å…¥æ¬„ä½ çš„ç‰©ä»¶ä¸¦å­˜ä¸¦å­˜æ”¾åˆ° inputField è®Šæ•¸å…§
+            inputField = GameObject.Find("è¼¸å…¥ä»‹é¢").GetComponent<TMP_InputField>();
+            //ç•¶ç©å®¶çµæŸç·¨è¼¯è¼¸å…¥æ¬„ä½æ™‚æœƒåŸ·è¡Œ PlayerInput æ–¹æ³•
             inputField.onEndEdit.AddListener(PlayerInput);
         }
 
         private void PlayerInput(string input)
         {
-            print($"<color=#363>{input}</color>");
+            print($"<color=#3f3>(input)</color>");
+            prompt = input;
+            // å•Ÿå‹•å”åŒç¨‹åº ç²å¾—çµæœ
+            StartCoroutine(GetResult());
         }
-  }
+
+        private IEnumerator GetResult()
+        {
+            var data = new
+            {
+                model = "llama-3.1-70b",
+                messages = new
+                {
+                    name = "user",
+                    content = prompt,
+                    role = this.role
+                },
+                stop = new string[] { "<|eot_id|>", "<|end_of_text|>" },
+                frequency_penalty = 0,
+                max_tokens = 2000,
+                temperature = 0.2,
+                top_p = 0.5,
+                top_k = 20,
+                stream = false
+            };
+
+            // å°‡è³‡æ–™è½‰ç‚º json ä»¥åŠä¸Šå‚³çš„ byte[]æ ¼å¼
+            string json = JsonUtility.ToJson(data);
+            byte[] postData = Encoding.UTF8.GetBytes(json);
+            //é€é POST å°‡è³‡æ–™å‚³éåˆ°æ¨¡å‹ä¼ºæœå™¨ä¸¦è¨­å®šæ¨™é¡Œ
+            UnityWebRequest request = new UnityWebRequest(url, "POST");
+            request.uploadHandler = new UploadHandlerRaw(postData);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            request.SetRequestHeader("Authorization", "Bearer " + key);
+
+            yield return request.SendWebRequest();
+
+            print(request.result);
+            print(request.error);
+        }
+    }
 }
