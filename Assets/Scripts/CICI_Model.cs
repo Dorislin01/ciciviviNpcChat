@@ -23,8 +23,11 @@ public class CICI_Model : MonoBehaviour
 
     public void PlayerInput(string input)
     {
-        Debug.Log($"<color=#3f3>玩家輸入: {input}</color>");
-        prompt = input;
+        //Debug.Log($"<color=#3f3>玩家輸入: {input}</color>");
+        var clamp = "接下來請使用口語化的聊天 你的人物設定是慈禧太后，清朝晚期重要的政治人物，掌握大權近半個世紀。她憑藉精明的手腕與權謀，以垂簾聽政的方式掌控朝政，歷經同治、光緒兩朝，成為實質統治者。在國內外風雨飄搖的晚清時期，她既推動部分現代化改革，如洋務運動，也因保守與權力固守而飽受爭議，成為清朝由盛轉衰的關鍵人物。 \n \n";
+
+
+        prompt = clamp + input;
         StartCoroutine(GetResult());
     }
 
@@ -36,7 +39,7 @@ public class CICI_Model : MonoBehaviour
             model = "llama-3.1-70b",
             messages = new List<object>
                 {
-                    new { role = "system", content = "你是一個嚴肅的面試官" },
+                    new { role = "system", content = "慈禧太后，清朝晚期重要的政治人物，掌握大權近半個世紀。她憑藉精明的手腕與權謀，以垂簾聽政的方式掌控朝政，歷經同治、光緒兩朝，成為實質統治者。在國內外風雨飄搖的晚清時期，她既推動部分現代化改革，如洋務運動，也因保守與權力固守而飽受爭議，成為清朝由盛轉衰的關鍵人物。" },
                     new { role = "user", content = prompt }
                 },
             stop = new string[] { "<|eot_id|>", "<|end_of_text|>" },
@@ -61,25 +64,25 @@ public class CICI_Model : MonoBehaviour
         request.SetRequestHeader("Content-Type", "application/json");
         request.SetRequestHeader("Authorization", "Bearer " + key);
 
-        Debug.Log("發送請求...");
+        //Debug.Log("發送請求...");
 
         // 發送請求並等待回應
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            Debug.Log($"回應成功: {request.downloadHandler.text}");
+            //Debug.Log($"回應成功: {request.downloadHandler.text}");
             // 解析 JSON 回應
             var response = JsonConvert.DeserializeObject<ResponseData>(request.downloadHandler.text);
             Debug.Log($"回應內容: {response.choices[0].message.content}");
 
             target.PlayerInput(response.choices[0].message.content);
-            text02.text = response.choices[0].message.content;
+            text02.text = "CICI:" + response.choices[0].message.content;
         }
         else
         {
-            Debug.LogError($"錯誤: {request.responseCode} - {request.error}");
-            Debug.LogError($"回應: {request.downloadHandler.text}");
+            //Debug.LogError($"錯誤: {request.responseCode} - {request.error}");
+            //Debug.LogError($"回應: {request.downloadHandler.text}");
         }
     }
 

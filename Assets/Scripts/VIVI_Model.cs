@@ -22,14 +22,17 @@ public class VIVI_Model : MonoBehaviour
 
     private void Start()
     {
-        target.PlayerInput("你好我叫做VIVI，師大設計系的學生，又稱社畜");
+        target.PlayerInput("你好，我是維多利亞女王，大不列顛及愛爾蘭聯合王國的君主，同時也是印度的皇后。 很高興認識你");
     }
 
 
     public void PlayerInput(string input)
     {
-        Debug.Log($"<color=#3f3>玩家輸入: {input}</color>");
-        prompt = input;
+        //Debug.Log($"<color=#3f3>玩家輸入: {input}</color>");
+        var clamp = "接下來請使用口語化的聊天 你的人物設定是 維多利亞女王，英國史上在位最久的君主之一，象徵著維多利亞時代的繁榮與變革。她見證了工業革命、英國現代化發展及大英帝國的擴張，同時重視家庭與傳統，透過子女聯結歐洲皇室，被譽為「歐洲的祖母」。 \n \n";
+
+
+        prompt = clamp + input;
         StartCoroutine(GetResult());
     }
 
@@ -41,12 +44,12 @@ public class VIVI_Model : MonoBehaviour
             model = "llama-3.1-70b",
             messages = new List<object>
                 {
-                    new { role = "system", content = "你是一個嚴肅的面試官" },
+                    new { role = "system", content = "維多利亞女王，英國史上在位最久的君主之一，象徵著維多利亞時代的繁榮與變革。她見證了工業革命、英國現代化發展及大英帝國的擴張，同時重視家庭與傳統，透過子女聯結歐洲皇室，被譽為「歐洲的祖母」。" },
                     new { role = "user", content = prompt }
                 },
             stop = new string[] { "<|eot_id|>", "<|end_of_text|>" },
             frequency_penalty = 0,
-            max_tokens = 2000,
+            max_tokens = 100,
             temperature = 0.2f,
             top_p = 0.5f,
             top_k = 20,
@@ -66,26 +69,26 @@ public class VIVI_Model : MonoBehaviour
         request.SetRequestHeader("Content-Type", "application/json");
         request.SetRequestHeader("Authorization", "Bearer " + key);
 
-        Debug.Log("發送請求...");
+       // Debug.Log("發送請求...");
 
         // 發送請求並等待回應
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            Debug.Log($"回應成功: {request.downloadHandler.text}");
+            //Debug.Log($"回應成功: {request.downloadHandler.text}");
             // 解析 JSON 回應
             var response = JsonConvert.DeserializeObject<ResponseData>(request.downloadHandler.text);
             Debug.Log($"回應內容: {response.choices[0].message.content}");
 
             target.PlayerInput(response.choices[0].message.content);
 
-            text.text = response.choices[0].message.content;
+            text.text = "VIVI:" + response.choices[0].message.content;
         }
         else
         {
-            Debug.LogError($"錯誤: {request.responseCode} - {request.error}");
-            Debug.LogError($"回應: {request.downloadHandler.text}");
+            //Debug.LogError($"錯誤: {request.responseCode} - {request.error}");
+            //Debug.LogError($"回應: {request.downloadHandler.text}");
         }
     }
 
