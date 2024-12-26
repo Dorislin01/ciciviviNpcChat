@@ -64,14 +64,14 @@ public class CICI_Model : MonoBehaviour
         request.SetRequestHeader("Content-Type", "application/json");
         request.SetRequestHeader("Authorization", "Bearer " + key);
 
-        //Debug.Log("發送請求...");
+        Debug.Log("發送請求...");
 
         // 發送請求並等待回應
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            //Debug.Log($"回應成功: {request.downloadHandler.text}");
+            Debug.Log($"回應成功: {request.downloadHandler.text}");
             // 解析 JSON 回應
             var response = JsonConvert.DeserializeObject<ResponseData>(request.downloadHandler.text);
             Debug.Log($"回應內容: {response.choices[0].message.content}");
@@ -81,8 +81,8 @@ public class CICI_Model : MonoBehaviour
         }
         else
         {
-            //Debug.LogError($"錯誤: {request.responseCode} - {request.error}");
-            //Debug.LogError($"回應: {request.downloadHandler.text}");
+            Debug.LogError($"錯誤: {request.responseCode} - {request.error}");
+            Debug.LogError($"回應: {request.downloadHandler.text}");
         }
     }
 
